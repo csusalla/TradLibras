@@ -77,6 +77,36 @@ make clean    # Limpa builds e cache
 - **Tech**: NestJS, TypeScript, PostgreSQL
 - **Docs**: http://localhost:8000/api
 
+## 🔌 Como embutir o widget em uma página HTML simples
+
+Exemplo mínimo usando o build UMD do SDK:
+
+```html
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Widget TradLibras</title>
+    <script src="/node_modules/@tradlibras/sdk/dist/tradlibras.min.js"></script>
+    <script>
+      // registra o web component
+      window.Tradlibras && window.Tradlibras.registerWidget && window.Tradlibras.registerWidget();
+    </script>
+  </head>
+  <body>
+    <libras-translator-widget api-url="http://localhost:8000"></libras-translator-widget>
+  </body>
+  </html>
+```
+
+Com bundlers modernos, importe e registre:
+
+```ts
+import { registerWidget } from '@tradlibras/sdk';
+registerWidget();
+```
+
 ## 🧪 Testes
 
 ```bash
