@@ -95,7 +95,7 @@ Exemplo mínimo usando o build UMD do SDK:
     </script>
   </head>
   <body>
-    <libras-translator-widget api-url="http://localhost:8000"></libras-translator-widget>
+    <libras-translator-widget api-url="http://localhost:8000" lang="pt-BR" autoplay theme="dark" size="medium"></libras-translator-widget>
   </body>
   </html>
 ```
@@ -105,6 +105,29 @@ Com bundlers modernos, importe e registre:
 ```ts
 import { registerWidget } from '@tradlibras/sdk';
 registerWidget();
+```
+
+## 🧰 GitHub CLI (gh) para abrir Pull Request
+
+Instalação rápida (Ubuntu/Debian):
+
+```bash
+sudo apt-get update -y && sudo apt-get install -y gh
+```
+
+Login e criação de PR:
+
+```bash
+# Faça login (navegador ou token)
+gh auth login
+
+# Garanta que sua branch foi enviada
+git push -u origin HEAD
+
+# Crie o PR com título e descrição
+gh pr create \
+  --title "MVP PT-BR→LIBRAS: API, Web, SDK widget (UMD/ESM), offline cache/dict, coarticulation+NMF, consent/retention" \
+  --body "Implements end-to-end MVP: API (/translate, /sign/generate, /health), Web 16:9 player + captions, SDK web component (UMD/ESM) com fallback offline e cache, mobile stubs, docs e dockerfiles."
 ```
 
 ## 🧪 Testes
