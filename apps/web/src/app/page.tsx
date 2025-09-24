@@ -110,6 +110,8 @@ export default function Home() {
   const API_URL = typeof window !== 'undefined' ? (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000') : '';
   const [input, setInput] = useState('');
   const [caption, setCaption] = useState<string>('');
+  const [consent, setConsent] = useState<boolean>(false);
+  const [retention, setRetention] = useState<number>(0);
   const [glossTimings, setGlossTimings] = useState<GlossTiming[]>([]);
   const [timeline, setTimeline] = useState<PoseTimeline | null>(null);
   const [playing, setPlaying] = useState(false);
@@ -172,6 +174,14 @@ export default function Home() {
             </h2>
             
             <div className="space-y-4">
+              <div className="flex items-center gap-2 text-white/80 text-sm">
+                <input id="consent" type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} />
+                <label htmlFor="consent">Consinto o uso do microfone</label>
+                <span className="ml-4">Retenção (dias):</span>
+                <input type="number" min={0} value={retention} onChange={(e) => setRetention(parseInt(e.target.value || '0'))} className="w-20 rounded px-2 py-1 bg-white/20 border border-white/30" />
+                <button onClick={() => { if (typeof window !== 'undefined') { localStorage.clear(); sessionStorage.clear(); } }} className="ml-auto bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">Excluir meus dados</button>
+              </div>
+
               <textarea
                 placeholder="Digite ou fale o texto para traduzir..."
                 className="w-full h-32 p-4 bg-white/20 border border-white/30 rounded-lg text-white placeholder-white/60 resize-none focus:outline-none focus:border-white/50"

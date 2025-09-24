@@ -42,6 +42,7 @@ export class TradLibras {
   private container: HTMLElement | null = null;
   private isInitialized: boolean = false;
   private isRecording: boolean = false;
+  private onlinePreferred: boolean = true;
 
   constructor(apiKey: string, apiUrl: string = 'https://api.tradlibras.com.br') {
     this.apiKey = apiKey;
@@ -79,22 +80,62 @@ export class TradLibras {
     }
 
     try {
-      // TODO: Implementar chamada real para API
-      console.log('Traduzindo texto:', text);
-      
-      // Resultado mockado para desenvolvimento
-      const result: TranslationResult = {
-        text,
-        signs: this.mockSignsData(text),
-        duration: text.length * 0.5, // 0.5s por caractere
-        confidence: 0.95
-      };
+      // Escolher pipeline online/offline
+      const isOnline = typeof navigator !== 'undefined' ? navigator.onLine : true;
+      const useOnline = this.onlinePreferred && isOnline;
 
-      this.displayTranslation(result);
-      return result;
+      if (useOnline) {
+        // pipeline online (API)
+        const res = await fetch(`${this.apiUrl.replace(/\/$/, '')}/translate`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text })
+        });
+        if (!res.ok) throw new Error(`API error: ${res.status}`);
+        const data = await res.json();
+        this.displayTranslation({
+          text,
+          signs: this.mockSignsData(data.caption || text),
+          duration: data.glosses?.length || 0,
+          confidence: 0.95,
+        });
+        return {
+          text,
+          signs: this.mockSignsData(data.caption || text),
+          duration: data.glosses?.length || 0,
+          confidence: 0.95,
+        };
+      } else {
+        // pipeline offline
+        const { offlinePipeline } = await import('./offline');
+        const out = offlinePipeline(text);
+        this.displayTranslation({
+          text,
+          signs: this.mockSignsData(out.caption),
+          duration: out.glosses.length,
+          confidence: 0.9,
+        });
+        return {
+          text,
+          signs: this.mockSignsData(out.caption),
+          duration: out.glosses.length,
+          confidence: 0.9,
+        };
+      }
     } catch (error) {
-      console.error('Erro na tradução:', error);
-      throw error;
+      console.error('Erro na tradução online, tentando offline:', error);
+      const { offlinePipeline } = await import('./offline');
+      const out = offlinePipeline(text);
+      this.displayTranslation({
+        text,
+        signs: this.mockSignsData(out.caption),
+        duration: out.glosses.length,
+        confidence: 0.9,
+      });
+      return {
+        text,
+        signs: this.mockSignsData(out.caption),
+        duration: out.glosses.length,
+        confidence: 0.9,
+      };
     }
   }
 
@@ -263,7 +304,7 @@ export function createWidget(apiKey: string, containerId: string, options?: Tran
 
 // Exportação para uso global (UMD)
 if (typeof window !== 'undefined') {
-  (window as any).TradLibras = { TradLibras, createWidget };
+  (window as any).TradLibras = { TradLibras, createWidget, registerWidget };
 }
 
 // Exportações padrão
