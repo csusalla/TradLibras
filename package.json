@@ -14,7 +14,20 @@
     "test": "make test",
     "run": "make run",
     "lint": "make lint",
-    "format": "make format"
+    "format": "make format",
+    "build:web": "npm run -w @tradlibras/web build",
+    "build:sdk": "npm run -w @tradlibras/sdk build",
+    "build:api": "npm run -w @tradlibras/api build",
+    "test:web": "npm run -w @tradlibras/web test",
+    "test:sdk": "npm run -w @tradlibras/sdk test",
+    "test:api": "npm run -w @tradlibras/api test",
+    "lint:web": "npm run -w @tradlibras/web lint",
+    "lint:sdk": "npm run -w @tradlibras/sdk lint",
+    "lint:api": "npm run -w @tradlibras/api lint",
+    "format:web": "npm run -w @tradlibras/web format || true",
+    "format:sdk": "npm run -w @tradlibras/sdk format",
+    "format:api": "npm run -w @tradlibras/api format",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,json,md,yml,yaml}\""
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

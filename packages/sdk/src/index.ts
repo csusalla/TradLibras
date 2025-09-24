@@ -268,3 +268,6 @@ if (typeof window !== 'undefined') {
 
 // Exportações padrão
 export default TradLibras;
+
+// Web Component
+export { LibrasTranslatorWidget, registerWidget } from './widget';

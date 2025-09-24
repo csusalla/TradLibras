@@ -42,7 +42,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  const port = process.env.API_PORT || 8000;
+  const port = Number(process.env.PORT || process.env.API_PORT || 8000);
   await app.listen(port);
   
   console.log(`🚀 TradLibras API rodando em http://localhost:${port}`);
