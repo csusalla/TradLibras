@@ -42,6 +42,35 @@ fun TranslateScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        // Consent + Retention Row
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                var consent by remember { mutableStateOf(false) }
+                var retentionDays by remember { mutableStateOf("0") }
+                Checkbox(checked = consent, onCheckedChange = { consent = it })
+                Text("Consinto o uso do microfone", style = MaterialTheme.typography.bodyMedium)
+                Spacer(modifier = Modifier.weight(1f))
+                OutlinedTextField(
+                    value = retentionDays,
+                    onValueChange = { retentionDays = it.filter { c -> c.isDigit() } },
+                    label = { Text("Retenção (dias)") },
+                    singleLine = true,
+                    modifier = Modifier.width(160.dp)
+                )
+                Button(onClick = { /* mock wipe local only */ }) {
+                    Text("Excluir meus dados")
+                }
+            }
+        }
         // Header
         Card(
             modifier = Modifier.fillMaxWidth(),

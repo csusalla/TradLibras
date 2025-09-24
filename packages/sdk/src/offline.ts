@@ -8,7 +8,7 @@ export type Keyframe = {
 
 export type PoseTimeline = { fps: number; totalDuration: number; keyframes: Keyframe[] };
 
-type CacheRecord = { caption: string; timeline: PoseTimeline };
+type CacheRecord = { caption: string; timeline: PoseTimeline; savedAt: number };
 
 const PHRASE_DICTIONARY: Record<string, string> = {
   'bom dia': 'BOM_DIA',
@@ -175,6 +175,8 @@ export function generatePoseTimeline(glosses: string[]): PoseTimeline {
 
 // Simple local cache (localStorage with LRU semantics)
 const CACHE_KEY = 'tradlibras_cache_v1';
+const SESSION_CACHE_KEY = 'tradlibras_cache_session_v1';
+const RETENTION_KEY = 'tradlibras_retention_days';
 const MAX_ENTRIES = 50;
 
 type StoredCache = {
@@ -182,9 +184,31 @@ type StoredCache = {
   items: Record<string, CacheRecord>;
 };
 
+function getRetentionDays(): number {
+  try {
+    const raw = typeof localStorage !== 'undefined' ? localStorage.getItem(RETENTION_KEY) : null;
+    const v = raw != null ? parseInt(raw, 10) : 0;
+    return Number.isFinite(v) ? v : 0;
+  } catch {
+    return 0;
+  }
+}
+
+export function setRetentionDays(days: number) {
+  try {
+    if (typeof localStorage !== 'undefined') localStorage.setItem(RETENTION_KEY, String(Math.max(0, Math.floor(days))));
+  } catch {}
+}
+
+export function getCurrentRetentionDays(): number {
+  return getRetentionDays();
+}
+
 function readCache(): StoredCache {
   try {
-    const raw = typeof localStorage !== 'undefined' ? localStorage.getItem(CACHE_KEY) : null;
+    const retention = getRetentionDays();
+    const storage = retention === 0 ? sessionStorage : localStorage;
+    const raw = typeof storage !== 'undefined' ? storage.getItem(retention === 0 ? SESSION_CACHE_KEY : CACHE_KEY) : null;
     if (!raw) return { order: [], items: {} };
     return JSON.parse(raw);
   } catch {
@@ -194,7 +218,12 @@ function readCache(): StoredCache {
 
 function writeCache(cache: StoredCache) {
   try {
-    if (typeof localStorage !== 'undefined') localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
+    const retention = getRetentionDays();
+    if (retention === 0) {
+      if (typeof sessionStorage !== 'undefined') sessionStorage.setItem(SESSION_CACHE_KEY, JSON.stringify(cache));
+    } else {
+      if (typeof localStorage !== 'undefined') localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
+    }
   } catch {}
 }
 
@@ -202,6 +231,16 @@ export function cacheGet(caption: string): PoseTimeline | null {
   const c = readCache();
   const rec = c.items[caption];
   if (!rec) return null;
+  const retention = getRetentionDays();
+  if (retention > 0) {
+    const maxAge = retention * 86400000;
+    if (Date.now() - rec.savedAt > maxAge) {
+      delete c.items[caption];
+      c.order = c.order.filter(k => k !== caption);
+      writeCache(c);
+      return null;
+    }
+  }
   // move to end (most recent)
   c.order = c.order.filter(k => k !== caption);
   c.order.push(caption);
@@ -216,7 +255,7 @@ export function cacheSet(caption: string, timeline: PoseTimeline) {
   } else {
     c.order = c.order.filter(k => k !== caption).concat(caption);
   }
-  c.items[caption] = { caption, timeline };
+  c.items[caption] = { caption, timeline, savedAt: Date.now() };
   while (c.order.length > MAX_ENTRIES) {
     const oldest = c.order.shift();
     if (oldest) delete c.items[oldest];
@@ -239,5 +278,17 @@ export function prewarmCommon() {
   for (const p of phrases) {
     offlinePipeline(p);
   }
+}
+
+export function wipeLocalData() {
+  try {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.removeItem(CACHE_KEY);
+      localStorage.removeItem(RETENTION_KEY);
+    }
+    if (typeof sessionStorage !== 'undefined') {
+      sessionStorage.removeItem(SESSION_CACHE_KEY);
+    }
+  } catch {}
 }
 
