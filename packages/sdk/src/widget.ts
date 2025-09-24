@@ -95,11 +95,38 @@ export class LibrasTranslatorWidget extends HTMLElement {
 
   private async doTranslate(input: HTMLTextAreaElement, out: HTMLDivElement) {
     out.textContent = this.lang === 'pt-BR' ? 'Traduzindo...' : 'Translating...';
-    const res = await fetch(`${this.apiUrl}/translate`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: input.value, language: this.lang })
-    });
-    const data = await res.json();
-    out.textContent = data.caption || (this.lang === 'pt-BR' ? 'Sem resultado' : 'No result');
+    try {
+      // prefer online; fallback to offline
+      if (navigator.onLine) {
+        const res = await fetch(`${this.apiUrl}/translate`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: input.value, language: this.lang })
+        });
+        if (!res.ok) throw new Error(String(res.status));
+        const data = await res.json();
+        out.textContent = data.caption || (this.lang === 'pt-BR' ? 'Sem resultado' : 'No result');
+        try {
+          const glosses = (data.glosses || []).map((g: any) => g.gloss);
+          const res2 = await fetch(`${this.apiUrl}/sign/generate`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ glosses })
+          });
+          if (res2.ok) {
+            // could render a tiny 2D animation here; for now we just cache offline
+            const timeline = await res2.json();
+            const { cacheSet } = await import('./offline');
+            if (data.caption) cacheSet(data.caption, timeline);
+          }
+        } catch {}
+        return;
+      }
+      // offline fallback
+      const { offlinePipeline } = await import('./offline');
+      const outp = offlinePipeline(input.value);
+      out.textContent = outp.caption || (this.lang === 'pt-BR' ? 'Sem resultado' : 'No result');
+    } catch (e) {
+      const { offlinePipeline } = await import('./offline');
+      const outp = offlinePipeline(input.value);
+      out.textContent = outp.caption || (this.lang === 'pt-BR' ? 'Sem resultado' : 'No result');
+    }
   }
 }
 
