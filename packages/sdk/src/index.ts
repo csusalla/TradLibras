@@ -263,7 +263,7 @@ export function createWidget(apiKey: string, containerId: string, options?: Tran
 
 // Exportação para uso global (UMD)
 if (typeof window !== 'undefined') {
-  (window as any).TradLibras = { TradLibras, createWidget };
+  (window as any).TradLibras = { TradLibras, createWidget, registerWidget };
 }
 
 // Exportações padrão

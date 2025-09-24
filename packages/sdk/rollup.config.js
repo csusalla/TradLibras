@@ -25,5 +25,16 @@ export default [
     },
     plugins: [resolve(), commonjs(), typescript({ tsconfig: './tsconfig.json' }), terser()],
   },
+  // Additional UMD alias
+  {
+    input: 'src/index.ts',
+    output: {
+      file: 'dist/sdk.umd.js',
+      format: 'umd',
+      name: 'TradLibras',
+      sourcemap: true
+    },
+    plugins: [resolve(), commonjs(), typescript({ tsconfig: './tsconfig.json' })],
+  },
 ];
 

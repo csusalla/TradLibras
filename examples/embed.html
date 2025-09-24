@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TradLibras Widget - Exemplo</title>
+    <style> body { font-family: system-ui, sans-serif; padding: 24px; background:#0f172a; color:#e2e8f0 } .container{max-width:800px;margin:0 auto} </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Widget TradLibras</h1>
+      <p>Exemplo de incorporação do web component via UMD:</p>
+
+      <script src="../packages/sdk/dist/sdk.umd.js"></script>
+      <script>
+        if (window.Tradlibras && window.Tradlibras.registerWidget) {
+          window.Tradlibras.registerWidget();
+        }
+      </script>
+
+      <libras-translator-widget api-url="http://localhost:8000" lang="pt-BR" autoplay theme="dark" size="medium"></libras-translator-widget>
+    </div>
+  </body>
+  </html>
+
