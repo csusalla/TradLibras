@@ -1,0 +1,45 @@
+{
+  "name": "tradlibras",
+  "version": "1.0.0",
+  "description": "Plataforma de tradução para Libras com reconhecimento de voz e geração de sinais",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "services/*"
+  ],
+  "scripts": {
+    "dev": "make dev",
+    "build": "make build",
+    "test": "make test",
+    "run": "make run",
+    "lint": "make lint",
+    "format": "make format"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
+    "jest": "^29.0.0",
+    "turbo": "^1.10.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seu-usuario/tradlibras.git"
+  },
+  "keywords": [
+    "libras",
+    "acessibilidade",
+    "traducao",
+    "asr",
+    "reconhecimento-voz",
+    "lingua-sinais"
+  ],
+  "license": "MIT",
+  "author": "TradLibras Team"
+}

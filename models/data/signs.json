@@ -1,0 +1,307 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "totalSigns": 200,
+    "language": "pt-BR",
+    "region": "Brazil",
+    "lastUpdated": "2024-01-15",
+    "description": "Dicionário de sinais básicos de Libras para o sistema TradLibras"
+  },
+  "signs": [
+    {
+      "id": "ola",
+      "word": "olá",
+      "category": "greeting",
+      "variants": ["oi", "alô"],
+      "description": "Saudação básica - movimento da mão direita com dedos estendidos",
+      "handshape": {
+        "dominant": "5",
+        "nonDominant": null
+      },
+      "movement": {
+        "type": "oscillating",
+        "direction": "left-right",
+        "speed": "medium",
+        "repetitions": 2
+      },
+      "location": {
+        "primary": "neutral_space",
+        "height": "shoulder_level"
+      },
+      "animation": {
+        "type": "3d",
+        "duration": 1.5,
+        "fps": 30,
+        "keyframes": [
+          {
+            "time": 0.0,
+            "rightHand": {"x": 0, "y": 1.2, "z": 0.3},
+            "rightFingers": "extended"
+          },
+          {
+            "time": 0.5,
+            "rightHand": {"x": 0.2, "y": 1.2, "z": 0.3},
+            "rightFingers": "extended"
+          },
+          {
+            "time": 1.0,
+            "rightHand": {"x": -0.2, "y": 1.2, "z": 0.3},
+            "rightFingers": "extended"
+          },
+          {
+            "time": 1.5,
+            "rightHand": {"x": 0, "y": 1.2, "z": 0.3},
+            "rightFingers": "extended"
+          }
+        ]
+      },
+      "metadata": {
+        "difficulty": "easy",
+        "frequency": 95,
+        "region": "national",
+        "tags": ["saudação", "cumprimento", "básico"]
+      }
+    },
+    {
+      "id": "obrigado",
+      "word": "obrigado",
+      "category": "courtesy",
+      "variants": ["obrigada", "obrigadão"],
+      "description": "Agradecimento - mão direita toca o peito e move para frente",
+      "handshape": {
+        "dominant": "flat",
+        "nonDominant": null
+      },
+      "movement": {
+        "type": "linear",
+        "direction": "forward",
+        "speed": "medium",
+        "repetitions": 1
+      },
+      "location": {
+        "primary": "chest",
+        "secondary": "neutral_space"
+      },
+      "animation": {
+        "type": "3d",
+        "duration": 2.0,
+        "fps": 30,
+        "keyframes": [
+          {
+            "time": 0.0,
+            "rightHand": {"x": 0, "y": 1.0, "z": 0.1},
+            "rightFingers": "flat"
+          },
+          {
+            "time": 1.0,
+            "rightHand": {"x": 0, "y": 1.0, "z": 0.4},
+            "rightFingers": "flat"
+          }
+        ]
+      },
+      "metadata": {
+        "difficulty": "easy",
+        "frequency": 88,
+        "region": "national",
+        "tags": ["agradecimento", "cortesia", "básico"]
+      }
+    },
+    {
+      "id": "por_favor",
+      "word": "por favor",
+      "category": "courtesy",
+      "variants": ["por gentileza", "se possível"],
+      "description": "Pedido educado - movimento circular da mão no peito",
+      "handshape": {
+        "dominant": "flat",
+        "nonDominant": null
+      },
+      "movement": {
+        "type": "circular",
+        "direction": "clockwise",
+        "speed": "slow",
+        "repetitions": 2
+      },
+      "location": {
+        "primary": "chest",
+        "height": "chest_level"
+      },
+      "animation": {
+        "type": "3d",
+        "duration": 2.5,
+        "fps": 30,
+        "keyframes": [
+          {
+            "time": 0.0,
+            "rightHand": {"x": 0, "y": 1.0, "z": 0.1},
+            "rightFingers": "flat"
+          },
+          {
+            "time": 1.25,
+            "rightHand": {"x": 0.1, "y": 0.9, "z": 0.1},
+            "rightFingers": "flat"
+          },
+          {
+            "time": 2.5,
+            "rightHand": {"x": 0, "y": 1.0, "z": 0.1},
+            "rightFingers": "flat"
+          }
+        ]
+      },
+      "metadata": {
+        "difficulty": "medium",
+        "frequency": 75,
+        "region": "national",
+        "tags": ["cortesia", "pedido", "educação"]
+      }
+    },
+    {
+      "id": "desculpa",
+      "word": "desculpa",
+      "category": "courtesy",
+      "variants": ["me desculpe", "perdão"],
+      "description": "Pedido de desculpas - mão em movimento na testa",
+      "handshape": {
+        "dominant": "flat",
+        "nonDominant": null
+      },
+      "movement": {
+        "type": "linear",
+        "direction": "down",
+        "speed": "medium",
+        "repetitions": 1
+      },
+      "location": {
+        "primary": "forehead",
+        "secondary": "neutral_space"
+      },
+      "animation": {
+        "type": "3d",
+        "duration": 1.8,
+        "fps": 30,
+        "keyframes": [
+          {
+            "time": 0.0,
+            "rightHand": {"x": 0, "y": 1.5, "z": 0.1},
+            "rightFingers": "flat"
+          },
+          {
+            "time": 1.8,
+            "rightHand": {"x": 0, "y": 1.2, "z": 0.3},
+            "rightFingers": "flat"
+          }
+        ]
+      },
+      "metadata": {
+        "difficulty": "easy",
+        "frequency": 70,
+        "region": "national",
+        "tags": ["desculpa", "perdão", "cortesia"]
+      }
+    },
+    {
+      "id": "bom_dia",
+      "word": "bom dia",
+      "category": "greeting",
+      "variants": ["bom-dia"],
+      "description": "Saudação matinal - sol nascendo",
+      "handshape": {
+        "dominant": "flat",
+        "nonDominant": "support"
+      },
+      "movement": {
+        "type": "linear",
+        "direction": "up",
+        "speed": "slow",
+        "repetitions": 1
+      },
+      "location": {
+        "primary": "left_arm",
+        "secondary": "above_head"
+      },
+      "animation": {
+        "type": "3d",
+        "duration": 2.2,
+        "fps": 30,
+        "keyframes": [
+          {
+            "time": 0.0,
+            "leftHand": {"x": -0.3, "y": 1.0, "z": 0.2},
+            "rightHand": {"x": -0.3, "y": 0.8, "z": 0.2},
+            "leftFingers": "extended",
+            "rightFingers": "flat"
+          },
+          {
+            "time": 2.2,
+            "leftHand": {"x": -0.3, "y": 1.0, "z": 0.2},
+            "rightHand": {"x": -0.1, "y": 1.6, "z": 0.2},
+            "leftFingers": "extended",
+            "rightFingers": "flat"
+          }
+        ]
+      },
+      "metadata": {
+        "difficulty": "medium",
+        "frequency": 82,
+        "region": "national",
+        "tags": ["saudação", "manhã", "tempo"]
+      }
+    }
+  ],
+  "categories": {
+    "greeting": {
+      "name": "Saudações",
+      "description": "Cumprimentos e despedidas",
+      "color": "#4CAF50"
+    },
+    "courtesy": {
+      "name": "Cortesia",
+      "description": "Expressões de educação e polidez",
+      "color": "#2196F3"
+    },
+    "family": {
+      "name": "Família",
+      "description": "Membros da família e relacionamentos",
+      "color": "#FF9800"
+    },
+    "numbers": {
+      "name": "Números",
+      "description": "Números cardinais e ordinais",
+      "color": "#9C27B0"
+    },
+    "colors": {
+      "name": "Cores",
+      "description": "Nomes das cores",
+      "color": "#E91E63"
+    },
+    "time": {
+      "name": "Tempo",
+      "description": "Dias, meses, horas",
+      "color": "#607D8B"
+    }
+  },
+  "handshapes": {
+    "5": "Mão aberta com todos os dedos estendidos",
+    "flat": "Mão espalmada, dedos unidos",
+    "point": "Indicador apontando, outros dedos fechados",
+    "fist": "Mão fechada",
+    "ok": "Polegar e indicador formando círculo",
+    "peace": "Indicador e médio estendidos em V"
+  },
+  "locations": {
+    "neutral_space": "Espaço neutro na frente do corpo",
+    "chest": "Peito/tórax",
+    "forehead": "Testa",
+    "chin": "Queixo",
+    "shoulder_level": "Altura dos ombros",
+    "head": "Cabeça"
+  },
+  "notes": [
+    "Este é um conjunto inicial de 5 sinais de exemplo dos 200 planejados",
+    "Cada sinal deve ter animação 3D completa em produção",
+    "As coordenadas são relativas ao centro do avatar (0,0,0)",
+    "Duração em segundos, FPS para animações fluidas",
+    "Metadados incluem dificuldade e frequência de uso",
+    "Sistema suporta variações regionais e sinônimos"
+  ]
+}

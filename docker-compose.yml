@@ -1,0 +1,127 @@
+version: '3.8'
+
+services:
+  # Database
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: tradlibras
+      POSTGRES_USER: tradlibras
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tradlibras"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  # API Backend
+  api:
+    build:
+      context: ./services/api
+      dockerfile: ../../infra/docker/Dockerfile.api
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://tradlibras:password@postgres:5432/tradlibras
+      - REDIS_URL=redis://redis:6379
+      - PORT=8000
+      - JWT_SECRET=dev-secret-key
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./services/api:/app
+      - /app/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Web Frontend
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: ../../infra/docker/Dockerfile.web
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./apps/web:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - api
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # SDK Development Server
+  sdk-dev:
+    build:
+      context: ./packages/sdk
+      dockerfile: ../../infra/docker/Dockerfile.sdk
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./packages/sdk:/app
+      - /app/node_modules
+    command: npm run dev
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ML Models API (placeholder)
+  models-api:
+    build:
+      context: ./models
+      dockerfile: ../infra/docker/Dockerfile.models
+    environment:
+      - PYTHONPATH=/app
+      - MODEL_CACHE_DIR=/app/cache
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./models:/app
+      - models_cache:/app/cache
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres_data:
+  redis_data:
+  models_cache:
+
+networks:
+  default:
+    name: tradlibras-network
